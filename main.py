@@ -1,22 +1,22 @@
-import pygame as pg
+import pygame
 from enemy import Enemy
-import constants as c
+import constants
 
 #initialise pygame
-pg.init()
+pygame.init()
 
 #create clock
-clock = pg.time.Clock()
+clock = pygame.time.Clock()
 
 #create game window
-screen = pg.display.set_mode((c.SCREEN_WIDTH, c.SCREEN_HEIGHT))
-pg.display.set_caption("Tower Defence")
+screen = pygame.display.set_mode((constants.SCREEN_WIDTH, constants.SCREEN_HEIGHT))
+pygame.display.set_caption("Tower Defence")
 
 #load images
-enemy_image = pg.image.load('assets/images/enemies/enemy_1.png').convert_alpha()
+enemy_image = pygame.image.load('assets/enemy_1.png').convert_alpha()
 
 #create groups
-enemy_group = pg.sprite.Group()
+enemy_group = pygame.sprite.Group()
 
 waypoints = [
   (100, 100),
@@ -32,12 +32,12 @@ enemy_group.add(enemy)
 run = True
 while run:
 
-  clock.tick(c.FPS)
+  clock.tick(constants.FPS)
 
   screen.fill("grey100")
 
   #draw enemy path
-  pg.draw.lines(screen, "grey0", False, waypoints)
+  pygame.draw.lines(screen, "grey0", False, waypoints)
 
   #update groups
   enemy_group.update()
@@ -46,12 +46,12 @@ while run:
   enemy_group.draw(screen)
 
   #event handler
-  for event in pg.event.get():
+  for event in pygame.event.get():
     #quit program
-    if event.type == pg.QUIT:
+    if event.type == pygame.QUIT:
       run = False
 
   #update display
-  pg.display.flip()
+  pygame.display.flip()
 
-pg.quit()
+pygame.quit()
