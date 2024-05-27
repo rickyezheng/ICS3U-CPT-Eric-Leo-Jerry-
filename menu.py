@@ -7,7 +7,7 @@ pygame.init()
 # Screen settings
 SCREEN_WIDTH, SCREEN_HEIGHT = 800, 600
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
-pygame.display.set_caption("Toilet Tower Defence")
+pygame.display.set_caption("WYZ Tower Defence")
 
 # Colors
 WHITE = (255, 255, 255)
@@ -37,7 +37,7 @@ def draw_menu(screen, menu_options, font_size, font_color, background_color):
 def main_menu():
     """Displays the main menu and waits for user input."""
     screen.fill(MENU_BACKGROUND_COLOR)
-    title_text = title_font.render("Toilet Tower Defence", True, TITLE_FONT_COLOR)
+    title_text = title_font.render("WYZ Tower Defence", True, TITLE_FONT_COLOR)
     title_rect = title_text.get_rect(center=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 4))
     screen.blit(title_text, title_rect)
     draw_menu(screen, MENU_OPTIONS, MENU_FONT_SIZE, MENU_FONT_COLOR, MENU_BACKGROUND_COLOR)
