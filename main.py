@@ -21,7 +21,7 @@ map_image = pygame.image.load('assets/level.png').convert_alpha()
 enemy_image = pygame.image.load('assets/enemy_1.png').convert_alpha()
 
 #load json data for level
-with open('levels/level.tmj') as file:
+with open('assets/level.tmj') as file:
   world_data = json.load(file)
 
 #create world
