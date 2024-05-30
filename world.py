@@ -1,4 +1,4 @@
-import pygame
+import pygame as pg
 
 class World():
   def __init__(self, data, map_image):
