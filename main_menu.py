@@ -1,47 +1,48 @@
 import pygame
+import sys
 import constants
 
 class MainMenu:
     def __init__(self, screen):
         self.screen = screen
-        self.start_button = Button(constants.SCREEN_WIDTH // 2 - 100, 200, 'Start')
-        self.exit_button = Button(constants.SCREEN_WIDTH // 2 - 100, 300, 'Exit')
+        self.title_font = pygame.font.Font(None, 74)  # Adjust the font size as needed
+        self.button_font = pygame.font.Font(None, 50)  # Adjust the font size as needed
+        self.title = self.title_font.render("Tower Defence", True, pygame.Color('White'))
+
+        # Calculate button positions to be centered based on the title's center
+        screen_center_x = (constants.SCREEN_WIDTH + constants.SIDE_PANEL) // 2
+        self.start_button = Button(screen_center_x, 200, "Start", self.button_font, (255, 255, 255), (100, 100, 100))
+        self.exit_button = Button(screen_center_x, 300, "Exit", self.button_font, (255, 255, 255), (100, 100, 100))
 
     def draw(self):
-        self.screen.fill("grey100")
-        self.draw_text("Tower Defence", 50, constants.SCREEN_WIDTH // 2, 100)
+        self.screen.fill((0, 0, 0))  # Fill the screen with black
+        title_rect = self.title.get_rect(center=((constants.SCREEN_WIDTH + constants.SIDE_PANEL) // 2, 100))
+        self.screen.blit(self.title, title_rect)
         if self.start_button.draw(self.screen):
             return 'start'
         if self.exit_button.draw(self.screen):
             return 'exit'
         return 'main_menu'
 
-    def draw_text(self, text, size, x, y):
-        font = pygame.font.Font(None, size)
-        text_surface = font.render(text, True, "black")
-        text_rect = text_surface.get_rect()
-        text_rect.midtop = (x, y)
-        self.screen.blit(text_surface, text_rect)
-
 class Button:
-    def __init__(self, x, y, text):
-        self.image = pygame.Surface((200, 50))
-        self.image.fill("darkgrey")
-        self.rect = self.image.get_rect()
-        self.rect.topleft = (x, y)
-        self.text = text
-        self.font = pygame.font.Font(None, 40)
-        self.text_surf = self.font.render(self.text, True, "black")
-        self.text_rect = self.text_surf.get_rect(center=self.rect.center)
+    def __init__(self, center_x, y, text, font, color, hover_color):
+        self.image = font.render(text, True, color)
+        self.hover_image = font.render(text, True, hover_color)
+        self.rect = self.image.get_rect(center=(center_x, y))
+        self.clicked = False
 
     def draw(self, screen):
-        screen.blit(self.image, self.rect)
-        screen.blit(self.text_surf, self.text_rect)
-        return self.is_clicked()
+        action = False
+        pos = pygame.mouse.get_pos()
+        if self.rect.collidepoint(pos):
+            screen.blit(self.hover_image, self.rect.topleft)
+            if pygame.mouse.get_pressed()[0] == 1 and not self.clicked:
+                self.clicked = True
+                action = True
+        else:
+            screen.blit(self.image, self.rect.topleft)
 
-    def is_clicked(self):
-        mouse_pos = pygame.mouse.get_pos()
-        if self.rect.collidepoint(mouse_pos):
-            if pygame.mouse.get_pressed()[0]:
-                return True
-        return False
+        if pygame.mouse.get_pressed()[0] == 0:
+            self.clicked = False
+
+        return action
