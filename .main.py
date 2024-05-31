@@ -33,7 +33,7 @@ enemy_image = pygame.image.load('assets/enemy_1.png').convert_alpha()
 #buttons
 buy_turret_image = pygame.image.load('assets/buy_turret.png').convert_alpha()
 cancel_image = pygame.image.load('assets/cancel.png').convert_alpha()
-
+upgrade_turret_image=pygame.image.load("assets/upgrade_turret.png").convert_alpha
 #load json data for level
 with open('assets/level.tmj') as file:
     world_data = json.load(file)
@@ -80,6 +80,7 @@ enemy_group.add(enemy)
 #create buttons
 turret_button = Button(constants.SCREEN_WIDTH + 30, 120, buy_turret_image, True)
 cancel_button = Button(constants.SCREEN_WIDTH + 50, 180, cancel_image, True)
+upgrade_button = Button(constants.SCREEN_WIDTH + 5, 180, upgrade_turret_image, True)
 
 #initialize main menu
 main_menu = MainMenu(screen)
@@ -130,7 +131,10 @@ while run:
                 screen.blit(cursor_turret, cursor_rect)
             if cancel_button.draw(screen):
                 placing_turrets = False
-
+    #if turret has been selected, show upgrade
+    if selected_turret:
+        if upgrade_button.draw(screen):
+            selected_turret.upgrade()
     #event handler
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
