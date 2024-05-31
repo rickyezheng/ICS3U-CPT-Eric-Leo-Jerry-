@@ -5,6 +5,7 @@ from world import World
 from turret import Turret
 from button import Button
 import constants
+from main_menu import MainMenu
 
 #initialise pygame
 pygame.init()
@@ -80,70 +81,79 @@ enemy_group.add(enemy)
 turret_button = Button(constants.SCREEN_WIDTH + 30, 120, buy_turret_image, True)
 cancel_button = Button(constants.SCREEN_WIDTH + 50, 180, cancel_image, True)
 
+#initialize main menu
+main_menu = MainMenu(screen)  # Added initialization
+state = 'main_menu'  # Added state variable
+
 #game loop
 run = True
 while run:
-
   clock.tick(constants.FPS)
 
+  if state == 'main_menu':  # Added main menu state handling
+    state = main_menu.draw()
+  elif state == 'start':  # Game starts when 'start' state is active
   #########################
   # UPDATING SECTION
   #########################
 
   #update groups
-  enemy_group.update()
-  turret_group.update(enemy_group)
+    enemy_group.update()
+    turret_group.update(enemy_group)
 
-  #highlight selected turret
-  if selected_turret:
-    selected_turret.selected = True
+    #highlight selected turret
+    if selected_turret:
+      selected_turret.selected = True
 
-  #########################
-  # DRAWING SECTION
-  #########################
+    #########################
+    # DRAWING SECTION
+    #########################
 
-  screen.fill("grey100")
+    screen.fill("grey100")
 
-  #draw level
-  world.draw(screen)
+    #draw level
+    world.draw(screen)
 
-  #draw groups
-  enemy_group.draw(screen)
-  for turret in turret_group:
-    turret.draw(screen)
+    #draw groups
+    enemy_group.draw(screen)
+    for turret in turret_group:
+      turret.draw(screen)
 
-  #draw buttons
-  #button for placing turrets
-  if turret_button.draw(screen):
-    placing_turrets = True
-  #if placing turrets then show the cancel button as well
-  if placing_turrets == True:
-    #show cursor turret
-    cursor_rect = cursor_turret.get_rect()
-    cursor_pos = pygame.mouse.get_pos()
-    cursor_rect.center = cursor_pos
-    if cursor_pos[0] <= constants.SCREEN_WIDTH:
-      screen.blit(cursor_turret, cursor_rect)
-    if cancel_button.draw(screen):
-      placing_turrets = False
+    #draw buttons
+    #button for placing turrets
+    if turret_button.draw(screen):
+      placing_turrets = True
+    #if placing turrets then show the cancel button as well
+    if placing_turrets == True:
+      #show cursor turret
+      cursor_rect = cursor_turret.get_rect()
+      cursor_pos = pygame.mouse.get_pos()
+      cursor_rect.center = cursor_pos
+      if cursor_pos[0] <= constants.SCREEN_WIDTH:
+        screen.blit(cursor_turret, cursor_rect)
+      if cancel_button.draw(screen):
+        placing_turrets = False
 
-  #event handler
-  for event in pygame.event.get():
-    #quit program
-    if event.type == pygame.QUIT:
-      run = False
-    #mouse click
-    if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
-      mouse_pos = pygame.mouse.get_pos()
-      #check if mouse is on the game area
-      if mouse_pos[0] < constants.SCREEN_WIDTH and mouse_pos[1] < constants.SCREEN_HEIGHT:
-        #clear selected turrets
-        selected_turret = None
-        clear_selection()
-        if placing_turrets == True:
-          create_turret(mouse_pos)
-        else:
-          selected_turret = select_turret(mouse_pos)
+    #event handler
+    for event in pygame.event.get():
+      #quit program
+      if event.type == pygame.QUIT:
+        run = False
+      #mouse click
+      if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+        mouse_pos = pygame.mouse.get_pos()
+        #check if mouse is on the game area
+        if mouse_pos[0] < constants.SCREEN_WIDTH and mouse_pos[1] < constants.SCREEN_HEIGHT:
+          #clear selected turrets
+          selected_turret = None
+          clear_selection()
+          if placing_turrets == True:
+            create_turret(mouse_pos)
+          else:
+            selected_turret = select_turret(mouse_pos)
+
+      elif state == 'exit':  # Exit state handling
+          run = False
 
   #update display
   pygame.display.flip()
