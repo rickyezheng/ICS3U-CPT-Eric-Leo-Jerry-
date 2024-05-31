@@ -33,7 +33,7 @@ enemy_image = pygame.image.load('assets/enemy_1.png').convert_alpha()
 #buttons
 buy_turret_image = pygame.image.load('assets/buy_turret.png').convert_alpha()
 cancel_image = pygame.image.load('assets/cancel.png').convert_alpha()
-upgrade_turret_image=pygame.image.load("assets/upgrade_turret.png").convert_alpha
+upgrade_turret_image=pygame.image.load("assets/upgrade_turret.png").convert_alpha()
 #load json data for level
 with open('assets/level.tmj') as file:
     world_data = json.load(file)
