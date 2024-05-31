@@ -1,30 +1,23 @@
 import pygame
 import constants
 
-class MainMenu:
+class Settings:
     def __init__(self, screen):
         self.screen = screen
-        self.title_font = pygame.font.Font(None, 74)  # Adjust the font size as needed
-        self.button_font = pygame.font.Font(None, 50)  # Adjust the font size as needed
-        self.title = self.title_font.render("Tower Defence", True, pygame.Color('White'))
+        self.font = pygame.font.Font(None, 50)  # Adjust the font size as needed
+        self.title = self.font.render("Settings", True, pygame.Color('White'))
 
-        # Calculate button positions to be centered based on the title's center
+        # Calculate positions for buttons
         screen_center_x = (constants.SCREEN_WIDTH + constants.SIDE_PANEL) // 2
-        self.start_button = Button(screen_center_x, 200, "Start", self.button_font, (255, 255, 255), (100, 100, 100))
-        self.settings_button = Button(screen_center_x, 300, "Settings", self.button_font, (255, 255, 255), (100, 100, 100))
-        self.exit_button = Button(screen_center_x, 400, "Exit", self.button_font, (255, 255, 255), (100, 100, 100))
+        self.back_button = Button(screen_center_x, 400, "Back", self.font, (255, 255, 255), (100, 100, 100))
 
     def draw(self):
         self.screen.fill((0, 0, 0))  # Fill the screen with black
         title_rect = self.title.get_rect(center=((constants.SCREEN_WIDTH + constants.SIDE_PANEL) // 2, 100))
         self.screen.blit(self.title, title_rect)
-        if self.start_button.draw(self.screen):
-            return 'start'
-        if self.settings_button.draw(self.screen):
-            return 'settings'
-        if self.exit_button.draw(self.screen):
-            return 'exit'
-        return 'main_menu'
+        if self.back_button.draw(self.screen):
+            return 'main_menu'
+        return 'settings'
 
 class Button:
     def __init__(self, center_x, y, text, font, color, hover_color):
