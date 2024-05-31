@@ -6,7 +6,7 @@ from turret import Turret
 from button import Button
 import constants
 from main_menu import MainMenu
-from settings import Settings  # Import Settings
+from settings import Settings
 
 # Initialize pygame
 pygame.init()
@@ -123,6 +123,7 @@ while run:
         if selected_turret:
             if upgrade_button.draw(screen):
                 selected_turret.upgrade()
+
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             run = False
