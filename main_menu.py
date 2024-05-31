@@ -1,51 +1,47 @@
 import pygame
+import constants
 
-# Initialize Pygame
-pygame.init()
+class MainMenu:
+    def __init__(self, screen):
+        self.screen = screen
+        self.start_button = Button(constants.SCREEN_WIDTH // 2 - 100, 200, 'Start')
+        self.exit_button = Button(constants.SCREEN_WIDTH // 2 - 100, 300, 'Exit')
 
-# Create game window
-screen = pygame.display.set_mode((800, 600))
-pygame.display.set_caption("Tower Defence")
+    def draw(self):
+        self.screen.fill("grey100")
+        self.draw_text("Tower Defence", 50, constants.SCREEN_WIDTH // 2, 100)
+        if self.start_button.draw(self.screen):
+            return 'start'
+        if self.exit_button.draw(self.screen):
+            return 'exit'
+        return 'main_menu'
 
-# Load images
-title_image = pygame.image.load('assets/title.png').convert_alpha()
-start_image = pygame.image.load('assets/start.png').convert_alpha()
-exit_image = pygame.image.load('assets/exit.png').convert_alpha()
+    def draw_text(self, text, size, x, y):
+        font = pygame.font.Font(None, size)
+        text_surface = font.render(text, True, "black")
+        text_rect = text_surface.get_rect()
+        text_rect.midtop = (x, y)
+        self.screen.blit(text_surface, text_rect)
 
-# Create buttons
-start_button = start_image
-start_button_rect = start_button.get_rect()
-start_button_rect.x = 350
-start_button_rect.y = 250
+class Button:
+    def __init__(self, x, y, text):
+        self.image = pygame.Surface((200, 50))
+        self.image.fill("darkgrey")
+        self.rect = self.image.get_rect()
+        self.rect.topleft = (x, y)
+        self.text = text
+        self.font = pygame.font.Font(None, 40)
+        self.text_surf = self.font.render(self.text, True, "black")
+        self.text_rect = self.text_surf.get_rect(center=self.rect.center)
 
-exit_button = exit_image
-exit_button_rect = exit_button.get_rect()
-exit_button_rect.x = 350
-exit_button_rect.y = 350
+    def draw(self, screen):
+        screen.blit(self.image, self.rect)
+        screen.blit(self.text_surf, self.text_rect)
+        return self.is_clicked()
 
-# Game loop
-run = True
-while run:
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            run = False
-        if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
-            pos = pygame.mouse.get_pos()
-            if start_button_rect.collidepoint(pos):
-                # Start the game
-                run = False
-                # Add your game code here
-                #...
-            if exit_button_rect.collidepoint(pos):
-                run = False
-
-    # Draw menu
-    screen.fill("black")
-    screen.blit(title_image, (250, 100))
-    screen.blit(start_button, start_button_rect)
-    screen.blit(exit_button, exit_button_rect)
-
-    # Update display
-    pygame.display.flip()
-
-pygame.quit()
+    def is_clicked(self):
+        mouse_pos = pygame.mouse.get_pos()
+        if self.rect.collidepoint(mouse_pos):
+            if pygame.mouse.get_pressed()[0]:
+                return True
+        return False
