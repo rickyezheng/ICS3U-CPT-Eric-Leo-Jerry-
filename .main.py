@@ -19,6 +19,7 @@ screen = pygame.display.set_mode((constants.SCREEN_WIDTH + constants.SIDE_PANEL,
 pygame.display.set_caption("Tower Defence")
 
 # Game variables
+last_enemy_spawn = pygame.time.get_ticks()
 placing_turrets = False
 selected_turret = None
 
@@ -32,7 +33,12 @@ for x in range(1, constants.TURRET_LEVELS + 1):
 
 
 cursor_turret = pygame.image.load('assets/cursor_turret.png').convert_alpha()
-enemy_image = pygame.image.load('assets/enemy_1.png').convert_alpha()
+enemy_images = {
+    "weak": pygame.image.load('assets/enemy_1.png').convert_alpha(),
+    "medium": pygame.image.load('assets/enemy_2.png').convert_alpha(),
+    "strong": pygame.image.load('assets/enemy_3.png').convert_alpha(),
+    "elite": pygame.image.load('assets/enemy_4.png').convert_alpha()
+}
 buy_turret_image = pygame.image.load('assets/buy_turret.png').convert_alpha()
 cancel_image = pygame.image.load('assets/cancel.png').convert_alpha()
 upgrade_turret_image = pygame.image.load("assets/upgrade_turret.png").convert_alpha()
@@ -70,13 +76,11 @@ def clear_selection():
 # Create world
 world = World(world_data, map_image)
 world.process_data()
+world.process_enemies()
 
 # Create groups
 enemy_group = pygame.sprite.Group()
 turret_group = pygame.sprite.Group()
-
-enemy = Enemy(world.waypoints, enemy_image)
-enemy_group.add(enemy)
 
 # Create buttons
 turret_button = Button(constants.SCREEN_WIDTH + 30, 120, buy_turret_image, True)
@@ -117,6 +121,15 @@ while run:
         enemy_group.draw(screen)
         for turret in turret_group:
             turret.draw(screen)
+
+        #spawn enemies
+        if pygame.time.get_ticks() - last_enemy_spawn > constants.SPAWN_COOLDOWN:
+            if world.spawned_enemies < len(world.enemy_list):
+                enemy_type = world.enemy_list[world.spawned_enemies]
+                enemy = Enemy(enemy_type, world.waypoints, enemy_images)
+                enemy_group.add(enemy)
+                world.spawned_enemies += 1
+                last_enemy_spawn = pygame.time.get_ticks()
 
         if turret_button.draw(screen):
             placing_turrets = True
