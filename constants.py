@@ -7,7 +7,7 @@ SCREEN_HEIGHT = TILE_SIZE * ROWS
 FPS = 60
 
 #enemy constants
-SPAWN_COOLDOWN = 400
+SPAWN_COOLDOWN = 600
 
 #turret constants
 TURRET_LEVELS = 4
