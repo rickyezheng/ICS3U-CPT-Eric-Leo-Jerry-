@@ -27,6 +27,7 @@ selected_turret = None
 map_image = pygame.image.load('assets/level.png').convert_alpha()
 #turret levels
 turret_spritesheets= []
+#for loop that cycles through the turret PNGS
 for x in range(1, constants.TURRET_LEVELS + 1):
     turret_sheet = pygame.image.load(f'assets/turret_{x}.png').convert_alpha()
     turret_spritesheets.append(turret_sheet)
