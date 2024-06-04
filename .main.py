@@ -24,6 +24,7 @@ placing_turrets = False
 selected_turret = None
 
 # Load images
+#map
 map_image = pygame.image.load('assets/level.png').convert_alpha()
 #turret levels
 turret_spritesheets= []
@@ -32,14 +33,16 @@ for x in range(1, constants.TURRET_LEVELS + 1):
     turret_sheet = pygame.image.load(f'assets/turret_{x}.png').convert_alpha()
     turret_spritesheets.append(turret_sheet)
 
-
+#mouse cursor for turret
 cursor_turret = pygame.image.load('assets/cursor_turret.png').convert_alpha()
+#Dictionary for storing PNG in values
 enemy_images = {
     "weak": pygame.image.load('assets/enemy_1.png').convert_alpha(),
     "medium": pygame.image.load('assets/enemy_2.png').convert_alpha(),
     "strong": pygame.image.load('assets/enemy_3.png').convert_alpha(),
     "elite": pygame.image.load('assets/enemy_4.png').convert_alpha()
 }
+#buttons 
 buy_turret_image = pygame.image.load('assets/buy_turret.png').convert_alpha()
 cancel_image = pygame.image.load('assets/cancel.png').convert_alpha()
 upgrade_turret_image = pygame.image.load("assets/upgrade_turret.png").convert_alpha()
@@ -49,11 +52,19 @@ upgrade_turret_image = pygame.image.load("assets/upgrade_turret.png").convert_al
 # Load json data for level
 with open('assets/level.tmj') as file:
     world_data = json.load(file)
+# Fonts for text
+text_font = pygame.font.SysFont("Consolas", 24, bold= True)
+large_font = pygame.font.SysFont("Consolas", 36)
 
+#function for outputting the text       
+def draw_text(text, font, text_col, x, y):
+    img = font.render(text, True, text_col)
+    screen.blit(img, (x,y))
 def create_turret(mouse_pos):
     mouse_tile_x = mouse_pos[0] // constants.TILE_SIZE
     mouse_tile_y = mouse_pos[1] // constants.TILE_SIZE
     mouse_tile_num = (mouse_tile_y * constants.COLS) + mouse_tile_x
+    #check if tile is grass
     if world.tile_map[mouse_tile_num] == 7:
         space_is_free = True
         for turret in turret_group:
@@ -62,6 +73,8 @@ def create_turret(mouse_pos):
         if space_is_free ==True:
             new_turret = Turret(turret_spritesheets, mouse_tile_x, mouse_tile_y)
             turret_group.add(new_turret)
+        #deduct cost of turret
+        world.money-=constants.BUY_COST
 
 def select_turret(mouse_pos):
     mouse_tile_x = mouse_pos[0] // constants.TILE_SIZE
@@ -118,11 +131,15 @@ while run:
         #########################
 
         screen.fill("grey100")
+        #draw level
         world.draw(screen)
+        #draw groups
         enemy_group.draw(screen)
         for turret in turret_group:
             turret.draw(screen)
 
+        draw_text(str(world.health), text_font, "grey100,", 0, 0)
+        draw_text(str(world.money), text_font, "grey100,", 0, 0)
         #spawn enemies
         if pygame.time.get_ticks() - last_enemy_spawn > constants.SPAWN_COOLDOWN:
             if world.spawned_enemies < len(world.enemy_list):
@@ -146,7 +163,10 @@ while run:
             #if it can be upgraded show button
             if selected_turret.upgrade_level < constants.TURRET_LEVELS:
                 if upgrade_button.draw(screen):
-                    selected_turret.upgrade()
+                    if world.money>=constants.UPGRADE_COST:
+                        selected_turret.upgrade()
+                        world.money -= constants.UPGRADE_COST
+
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -156,8 +176,10 @@ while run:
             if mouse_pos[0] < constants.SCREEN_WIDTH and mouse_pos[1] < constants.SCREEN_HEIGHT:
                 selected_turret = None
                 clear_selection()
-                if placing_turrets:
-                    create_turret(mouse_pos)
+                if placing_turrets ==True:
+                    #check if there is enough money
+                    if world.money >= constants.BUY_COST:
+                        create_turret(mouse_pos)
                 else:
                     selected_turret = select_turret(mouse_pos)
         if state == 'exit':
