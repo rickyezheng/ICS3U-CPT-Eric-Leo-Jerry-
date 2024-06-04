@@ -48,3 +48,5 @@ class Button:
             self.clicked = False
 
         return action
+
+# This file was ChatGPTed
