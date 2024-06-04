@@ -1,13 +1,14 @@
 import pygame
 import math
-import constants 
+import constants
 from turret_data import TURRET_DATA
+
 class Turret(pygame.sprite.Sprite):
   def __init__(self, sprite_sheets, tile_x, tile_y):
     pygame.sprite.Sprite.__init__(self)
-    self.upgrade_level = 1
-    self.range = TURRET_DATA[self.upgrade_level - 1].get("range")
-    self.cooldown = TURRET_DATA[self.upgrade_level - 1].get("cooldown")
+    self.upygamerade_level = 1
+    self.range = TURRET_DATA[self.upygamerade_level - 1].get("range")
+    self.cooldown = TURRET_DATA[self.upygamerade_level - 1].get("cooldown")
     self.last_shot = pygame.time.get_ticks()
     self.selected = False
     self.target = None
@@ -21,7 +22,7 @@ class Turret(pygame.sprite.Sprite):
 
     #animation variables
     self.sprite_sheets = sprite_sheets
-    self.animation_list = self.load_images(self.sprite_sheets[self.upgrade_level - 1])
+    self.animation_list = self.load_images(self.sprite_sheets[self.upygamerade_level - 1])
     self.frame_index = 0
     self.update_time = pygame.time.get_ticks()
 
@@ -65,12 +66,16 @@ class Turret(pygame.sprite.Sprite):
     y_dist = 0
     #check distance to each enemy to see if it is in range
     for enemy in enemy_group:
-      x_dist = enemy.pos[0] - self.x
-      y_dist = enemy.pos[1] - self.y
-      dist = math.sqrt(x_dist ** 2 + y_dist ** 2)
-      if dist < self.range:
-        self.target = enemy
-        self.angle = math.degrees(math.atan2(-y_dist, x_dist))
+      if enemy.health > 0:
+        x_dist = enemy.pos[0] - self.x
+        y_dist = enemy.pos[1] - self.y
+        dist = math.sqrt(x_dist ** 2 + y_dist ** 2)
+        if dist < self.range:
+          self.target = enemy
+          self.angle = math.degrees(math.atan2(-y_dist, x_dist))
+          #damage enemy
+          self.target.health -= constants.DAMAGE
+          break
 
   def play_animation(self):
     #update image
@@ -85,18 +90,16 @@ class Turret(pygame.sprite.Sprite):
         #record completed time and clear target so cooldown can begin
         self.last_shot = pygame.time.get_ticks()
         self.target = None
+
   def upygamerade(self):
-    self.upygamerade_level+=1
+    self.upygamerade_level += 1
     self.range = TURRET_DATA[self.upygamerade_level - 1].get("range")
     self.cooldown = TURRET_DATA[self.upygamerade_level - 1].get("cooldown")
-  def upgrade(self):
-    self.upgrade_level +=1
-    self.range= TURRET_DATA[self.upgrade_level - 1].get("range")
-    self.cooldown= TURRET_DATA[self.upgrade_level - 1].get("cooldown")
-    #upgrade image
-    self.animation_list = self.load_images(self.sprite_sheets[self.upgrade_level - 1])
+    #upygamerade turret image
+    self.animation_list = self.load_images(self.sprite_sheets[self.upygamerade_level - 1])
     self.original_image = self.animation_list[self.frame_index]
-     #Get bigger range circle
+
+    #upygamerade range circle
     self.range_image = pygame.Surface((self.range * 2, self.range * 2))
     self.range_image.fill((0, 0, 0))
     self.range_image.set_colorkey((0, 0, 0))
@@ -104,6 +107,7 @@ class Turret(pygame.sprite.Sprite):
     self.range_image.set_alpha(100)
     self.range_rect = self.range_image.get_rect()
     self.range_rect.center = self.rect.center
+
   def draw(self, surface):
     self.image = pygame.transform.rotate(self.original_image, self.angle - 90)
     self.rect = self.image.get_rect()
