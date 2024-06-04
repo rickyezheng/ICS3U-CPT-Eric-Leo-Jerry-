@@ -6,9 +6,9 @@ from turret_data import TURRET_DATA
 class Turret(pygame.sprite.Sprite):
   def __init__(self, sprite_sheets, tile_x, tile_y):
     pygame.sprite.Sprite.__init__(self)
-    self.upygamerade_level = 1
-    self.range = TURRET_DATA[self.upygamerade_level - 1].get("range")
-    self.cooldown = TURRET_DATA[self.upygamerade_level - 1].get("cooldown")
+    self.upgrade_level = 1
+    self.range = TURRET_DATA[self.upgrade_level - 1].get("range")
+    self.cooldown = TURRET_DATA[self.upgrade_level - 1].get("cooldown")
     self.last_shot = pygame.time.get_ticks()
     self.selected = False
     self.target = None
@@ -22,7 +22,7 @@ class Turret(pygame.sprite.Sprite):
 
     #animation variables
     self.sprite_sheets = sprite_sheets
-    self.animation_list = self.load_images(self.sprite_sheets[self.upygamerade_level - 1])
+    self.animation_list = self.load_images(self.sprite_sheets[self.upgrade_level - 1])
     self.frame_index = 0
     self.update_time = pygame.time.get_ticks()
 
@@ -91,15 +91,15 @@ class Turret(pygame.sprite.Sprite):
         self.last_shot = pygame.time.get_ticks()
         self.target = None
 
-  def upygamerade(self):
-    self.upygamerade_level += 1
-    self.range = TURRET_DATA[self.upygamerade_level - 1].get("range")
-    self.cooldown = TURRET_DATA[self.upygamerade_level - 1].get("cooldown")
-    #upygamerade turret image
-    self.animation_list = self.load_images(self.sprite_sheets[self.upygamerade_level - 1])
+  def upgrade(self):
+    self.upgrade_level += 1
+    self.range = TURRET_DATA[self.upgrade_level - 1].get("range")
+    self.cooldown = TURRET_DATA[self.upgrade_level - 1].get("cooldown")
+    #upgrade turret image
+    self.animation_list = self.load_images(self.sprite_sheets[self.upgrade_level - 1])
     self.original_image = self.animation_list[self.frame_index]
 
-    #upygamerade range circle
+    #upgrade range circle
     self.range_image = pygame.Surface((self.range * 2, self.range * 2))
     self.range_image.fill((0, 0, 0))
     self.range_image.set_colorkey((0, 0, 0))

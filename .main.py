@@ -120,7 +120,7 @@ while run:
         # UPDATING SECTION
         #########################
 
-        enemy_group.update()
+        enemy_group.update(world)
         turret_group.update(enemy_group)
 
         if selected_turret:
@@ -138,8 +138,8 @@ while run:
         for turret in turret_group:
             turret.draw(screen)
 
-        draw_text(str(world.health), text_font, "grey100,", 0, 0)
-        draw_text(str(world.money), text_font, "grey100,", 0, 0)
+        draw_text(str(world.health), text_font, "grey100", 0, 0)
+        draw_text(str(world.money), text_font, "grey100", 0, 0)
         #spawn enemies
         if pygame.time.get_ticks() - last_enemy_spawn > constants.SPAWN_COOLDOWN:
             if world.spawned_enemies < len(world.enemy_list):
