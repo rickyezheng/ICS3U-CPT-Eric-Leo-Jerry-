@@ -139,7 +139,7 @@ while run:
             turret.draw(screen)
 
         draw_text(str(world.health), text_font, "grey100", 0, 0)
-        draw_text(str(world.money), text_font, "grey100", 0, 0)
+        draw_text(str(world.money), text_font, "grey100", 0, 30)
         #spawn enemies
         if pygame.time.get_ticks() - last_enemy_spawn > constants.SPAWN_COOLDOWN:
             if world.spawned_enemies < len(world.enemy_list):
@@ -163,7 +163,7 @@ while run:
             #if it can be upgraded show button
             if selected_turret.upgrade_level < constants.TURRET_LEVELS:
                 if upgrade_button.draw(screen):
-                    if world.money>=constants.UPGRADE_COST:
+                    if world.money >= constants.UPGRADE_COST:
                         selected_turret.upgrade()
                         world.money -= constants.UPGRADE_COST
 
