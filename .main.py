@@ -60,6 +60,7 @@ large_font = pygame.font.SysFont("Consolas", 36)
 def draw_text(text, font, text_col, x, y):
     img = font.render(text, True, text_col)
     screen.blit(img, (x,y))
+#Function for mouse position
 def create_turret(mouse_pos):
     mouse_tile_x = mouse_pos[0] // constants.TILE_SIZE
     mouse_tile_y = mouse_pos[1] // constants.TILE_SIZE
