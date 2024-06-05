@@ -137,7 +137,8 @@ while run:
         enemy_group.draw(screen)
         for turret in turret_group:
             turret.draw(screen)
-
+            
+        #displaying money and health
         draw_text(str(world.health), text_font, "grey100", 0, 0)
         draw_text(str(world.money), text_font, "grey100", 0, 30)
         #spawn enemies
