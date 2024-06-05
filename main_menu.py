@@ -49,4 +49,4 @@ class Button:
 
         return action
 
-# This file was ChatGPTed
+# This file was made using ChatGPT
