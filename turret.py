@@ -13,27 +13,27 @@ class Turret(pygame.sprite.Sprite):
     self.selected = False
     self.target = None
 
-    #position variables
+    # Position variables
     self.tile_x = tile_x
     self.tile_y = tile_y
-    #calculate center coordinates
+    # Calculate center coordinates
     self.x = (self.tile_x + 0.5) * constants.TILE_SIZE
     self.y = (self.tile_y + 0.5) * constants.TILE_SIZE
 
-    #animation variables
+    # Animation variables
     self.sprite_sheets = sprite_sheets
     self.animation_list = self.load_images(self.sprite_sheets[self.upgrade_level - 1])
     self.frame_index = 0
     self.update_time = pygame.time.get_ticks()
 
-    #update image
+    # Update image
     self.angle = 90
     self.original_image = self.animation_list[self.frame_index]
     self.image = pygame.transform.rotate(self.original_image, self.angle)
     self.rect = self.image.get_rect()
     self.rect.center = (self.x, self.y)
 
-    #create transparent circle showing range
+    # Create transparent circle showing range
     self.range_image = pygame.Surface((self.range * 2, self.range * 2))
     self.range_image.fill((0, 0, 0))
     self.range_image.set_colorkey((0, 0, 0))
@@ -43,7 +43,7 @@ class Turret(pygame.sprite.Sprite):
     self.range_rect.center = self.rect.center
 
   def load_images(self, sprite_sheet):
-    #extract images from spritesheet
+    # Extract images from spritesheet
     size = sprite_sheet.get_height()
     animation_list = []
     for x in range(constants.ANIMATION_STEPS):
@@ -52,19 +52,19 @@ class Turret(pygame.sprite.Sprite):
     return animation_list
 
   def update(self, enemy_group):
-    #if target picked, play firing animation
+    # If target picked, play firing animation
     if self.target:
       self.play_animation()
     else:
-      #search for new target once turret has cooled down
+      # Search for new target once turret has cooled down
       if pygame.time.get_ticks() - self.last_shot > self.cooldown:
         self.pick_target(enemy_group)
 
   def pick_target(self, enemy_group):
-    #find an enemy to target
+    # Find an enemy to target
     x_dist = 0
     y_dist = 0
-    #check distance to each enemy to see if it is in range
+    # Check distance to each enemy to see if it is in range
     for enemy in enemy_group:
       if enemy.health > 0:
         x_dist = enemy.pos[0] - self.x
@@ -73,21 +73,21 @@ class Turret(pygame.sprite.Sprite):
         if dist < self.range:
           self.target = enemy
           self.angle = math.degrees(math.atan2(-y_dist, x_dist))
-          #damage enemy
+          #Damage enemy
           self.target.health -= constants.DAMAGE
           break
 
   def play_animation(self):
-    #update image
+    # Update image
     self.original_image = self.animation_list[self.frame_index]
-    #check if enough time has passed since the last update
+    # Check if enough time has passed since the last update
     if pygame.time.get_ticks() - self.update_time > constants.ANIMATION_DELAY:
       self.update_time = pygame.time.get_ticks()
       self.frame_index += 1
-      #check if the animation has finished and reset to idle
+      # Check if the animation has finished and reset to idle
       if self.frame_index >= len(self.animation_list):
         self.frame_index = 0
-        #record completed time and clear target so cooldown can begin
+        # Record completed time and clear target so cooldown can begin
         self.last_shot = pygame.time.get_ticks()
         self.target = None
 
@@ -95,11 +95,11 @@ class Turret(pygame.sprite.Sprite):
     self.upgrade_level += 1
     self.range = TURRET_DATA[self.upgrade_level - 1].get("range")
     self.cooldown = TURRET_DATA[self.upgrade_level - 1].get("cooldown")
-    #upgrade turret image
+    # Upgrade turret image
     self.animation_list = self.load_images(self.sprite_sheets[self.upgrade_level - 1])
     self.original_image = self.animation_list[self.frame_index]
 
-    #upgrade range circle
+    # Upgrade range circle
     self.range_image = pygame.Surface((self.range * 2, self.range * 2))
     self.range_image.fill((0, 0, 0))
     self.range_image.set_colorkey((0, 0, 0))

@@ -24,18 +24,18 @@ class Enemy(pygame.sprite.Sprite):
     self.check_alive(world)
 
   def move(self, world):
-    #define a target waypoint
+    # Define a target waypoint
     if self.target_waypoint < len(self.waypoints):
       self.target = Vector2(self.waypoints[self.target_waypoint])
       self.movement = self.target - self.pos
     else:
-      #enemy has reached the end of the path
+      # Enemy has reached the end of the path
       self.kill()
       world.health -= 10
 
-    #calculate distance to target
+    # Calculate distance to target
     dist = self.movement.length()
-    #check if remaining distance is greater than the enemy speed
+    # Check if remaining distance is greater than the enemy speed
     if dist >= self.speed:
       self.pos += self.movement.normalize() * self.speed
     else:
@@ -44,11 +44,11 @@ class Enemy(pygame.sprite.Sprite):
       self.target_waypoint += 1
 
   def rotate(self):
-    #calculate distance to next waypoint
+    # Calculate distance to next waypoint
     dist = self.target - self.pos
-    #use distance to calculate angle
+    #Use distance to calculate angle
     self.angle = math.degrees(math.atan2(-dist[1], dist[0]))
-    #rotate image and update rectangle
+    # Rotate image and update rectangle
     self.image = pygame.transform.rotate(self.original_image, self.angle)
     self.rect = self.image.get_rect()
     self.rect.center = self.pos
