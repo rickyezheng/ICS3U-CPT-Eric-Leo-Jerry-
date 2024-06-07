@@ -19,6 +19,9 @@ screen = pygame.display.set_mode((constants.SCREEN_WIDTH + constants.SIDE_PANEL,
 pygame.display.set_caption("Tower Defence")
 
 # Game variables
+game_over = False
+game_outcome = 0 # -1 is loss & 1 is win
+level_started = False
 last_enemy_spawn = pygame.time.get_ticks()
 placing_turrets = False
 selected_turret = None
@@ -28,7 +31,7 @@ selected_turret = None
 map_image = pygame.image.load('assets/level.png').convert_alpha()
 # Turret levels
 turret_spritesheets= []
-#for loop that cycles through the turret PNGS
+# For loop that cycles through the turret PNGS
 for x in range(1, constants.TURRET_LEVELS + 1):
     turret_sheet = pygame.image.load(f'assets/turret_{x}.png').convert_alpha()
     turret_spritesheets.append(turret_sheet)
@@ -46,12 +49,14 @@ enemy_images = {
 buy_turret_image = pygame.image.load('assets/buy_turret.png').convert_alpha()
 cancel_image = pygame.image.load('assets/cancel.png').convert_alpha()
 upgrade_turret_image = pygame.image.load("assets/upgrade_turret.png").convert_alpha()
-
+begin_image = pygame.image.load("assets/begin.png").convert_alpha()
+restart_image = pygame.image.load("assets/restart.png").convert_alpha()
 
 
 # Load json data for level
 with open('assets/level.tmj') as file:
     world_data = json.load(file)
+
 # Fonts for text
 text_font = pygame.font.SysFont("Consolas", 24, bold= True)
 large_font = pygame.font.SysFont("Consolas", 36)
@@ -101,6 +106,8 @@ turret_group = pygame.sprite.Group()
 turret_button = Button(constants.SCREEN_WIDTH + 30, 120, buy_turret_image, True)
 cancel_button = Button(constants.SCREEN_WIDTH + 50, 180, cancel_image, True)
 upgrade_button = Button(constants.SCREEN_WIDTH + 5, 180, upgrade_turret_image, True)
+begin_button = Button(constants.SCREEN_WIDTH + 60, 300, begin_image, True)
+restart_button = Button(310, 300, restart_image, True)
 
 # Initialize main menu and settings
 main_menu = MainMenu(screen)
@@ -120,7 +127,17 @@ while run:
         #########################
         # UPDATING SECTION
         #########################
-
+        
+        if game_over == False:
+            #check if player has lost
+            if world.health <= 0:
+                game_over = True
+                game_outcome = -1 #loss
+            #check if player has won
+            if world.level > constants.TOTAL_LEVELS:
+                game_over = True
+                game_outcome = 1 #win
+        
         enemy_group.update(world)
         turret_group.update(enemy_group)
 
@@ -142,18 +159,44 @@ while run:
         # Displaying money and health
         draw_text(str(world.health), text_font, "grey100", 0, 0)
         draw_text(str(world.money), text_font, "grey100", 0, 30)
-        # Spawn enemies
-        if pygame.time.get_ticks() - last_enemy_spawn > constants.SPAWN_COOLDOWN:
-            if world.spawned_enemies < len(world.enemy_list):
-                enemy_type = world.enemy_list[world.spawned_enemies]
-                enemy = Enemy(enemy_type, world.waypoints, enemy_images)
-                enemy_group.add(enemy)
-                world.spawned_enemies += 1
-                last_enemy_spawn = pygame.time.get_ticks()
+        draw_text(str(world.level), text_font, "grey100", 0, 60)
 
+        if game_over == False:
+            # Check if the level has been started or not
+            if level_started == False:
+                if begin_button.draw(screen):
+                    level_started = True
+        else:
+        # Check if the level has been started or not
+            if level_started == False:
+                if begin_button.draw(screen):
+                    level_started = True
+            else:
+                # Spawn enemies
+                if pygame.time.get_ticks() - last_enemy_spawn > constants.SPAWN_COOLDOWN:
+                    if world.spawned_enemies < len(world.enemy_list):
+                        enemy_type = world.enemy_list[world.spawned_enemies]
+                        enemy = Enemy(enemy_type, world.waypoints, enemy_images)
+                        enemy_group.add(enemy)
+                        world.spawned_enemies += 1
+                        last_enemy_spawn = pygame.time.get_ticks()
+        
+        # Check if the wave is finished
+        if world.check_level_complete() == True:
+            world.money += constants.LEVEL_COMPLETE_REWARD
+            world.level += 1
+            level_started = False
+            last_enemy_spawn = pygame.time.get_ticks()
+            world.reset_level()
+            world.process_enemies()
+
+        # Draw buttons
+        # Button for placing turrets
         if turret_button.draw(screen):
             placing_turrets = True
+        # If placing turrets then show the cancel button as well
         if placing_turrets==True:
+            # Show cursor turret
             cursor_rect = cursor_turret.get_rect()
             cursor_pos = pygame.mouse.get_pos()
             cursor_rect.center = cursor_pos
@@ -161,6 +204,7 @@ while run:
                 screen.blit(cursor_turret, cursor_rect)
             if cancel_button.draw(screen):
                 placing_turrets = False
+        # If a turret is selected then show the upgrade button
         if selected_turret:
             # If it can be upgraded show button
             if selected_turret.upgrade_level < constants.TURRET_LEVELS:
@@ -169,7 +213,27 @@ while run:
                         selected_turret.upgrade()
                         world.money -= constants.UPGRADE_COST
 
+    else:
+        pygame.draw.rect(screen, "dodgerblue", (200, 200, 400, 200), border_radius = 30)
+        if game_outcome == -1:
+            draw_text("GAME OVER", large_font, "grey0", 310, 230)
+        elif game_outcome == 1:
+            draw_text("YOU WIN!", large_font, "grey0", 315, 230)
+        # Restart level
+        if restart_button.draw(screen):
+            game_over = False
+            level_started = False
+            placing_turrets = False
+            selected_turret = None
+            last_enemy_spawn = pygame.time.get_ticks()
+            world = World(world_data, map_image)
+            world.process_data()
+            world.process_enemies()
+            # Empty groups
+            enemy_group.empty()
+            turret_group.empty()
 
+    # Event handler (add comments)
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             run = False
