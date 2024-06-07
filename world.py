@@ -6,6 +6,7 @@ from enemy_data import ENEMY_SPAWN_DATA
 class World():
   def __init__(self, data, map_image):
     self.level = 1
+    self.game_speed = 1
     self.health = constants.HEALTH
     self.money = constants.MONEY
     self.tile_map = []
@@ -14,9 +15,11 @@ class World():
     self.image = map_image
     self.enemy_list = []
     self.spawned_enemies = 0
+    self.killed_enemies = 0
+    self.missed_enemies = 0
 
   def process_data(self):
-    # Look through data to extract relevant info
+    #look through data to extract relevant info
     for layer in self.level_data["layers"]:
       if layer["name"] == "tilemap":
         self.tile_map = layer["data"]
@@ -26,7 +29,7 @@ class World():
           self.process_waypoints(waypoint_data)
 
   def process_waypoints(self, data):
-    # Iterate through waypoints to extract individual sets of x and y coordinates
+    #iterate through waypoints to extract individual sets of x and y coordinates
     for point in data:
       temp_x = point.get("x")
       temp_y = point.get("y")
@@ -38,8 +41,19 @@ class World():
       enemies_to_spawn = enemies[enemy_type]
       for enemy in range(enemies_to_spawn):
         self.enemy_list.append(enemy_type)
-    # Now randomize the list to shuffle the enemies
+    #now randomize the list to shuffle the enemies
     random.shuffle(self.enemy_list)
+
+  def check_level_complete(self):
+    if (self.killed_enemies + self.missed_enemies) == len(self.enemy_list):
+      return True
+
+  def reset_level(self):
+    #reset enemy variables
+    self.enemy_list = []
+    self.spawned_enemies = 0
+    self.killed_enemies = 0
+    self.missed_enemies = 0
 
   def draw(self, surface):
     surface.blit(self.image, (0, 0))
