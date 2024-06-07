@@ -53,9 +53,9 @@ begin_image = pygame.image.load("assets/begin.png").convert_alpha()
 restart_image = pygame.image.load("assets/restart.png").convert_alpha()
 fast_forward_image = pygame.image.load("assets/fast_forward.png").convert_alpha()
 # GUI
-heart_image = pygame.image.load("assets/images/gui/heart.png").convert_alpha()
-coin_image = pygame.image.load("assets/images/gui/coin.png").convert_alpha()
-logo_image = pygame.image.load("assets/images/gui/logo.png").convert_alpha()
+heart_image = pygame.image.load("assets/heart.png").convert_alpha()
+coin_image = pygame.image.load("assets/coin.png").convert_alpha()
+logo_image = pygame.image.load("assets/logo.png").convert_alpha()
 
 # Load sounds
 shot_fx= pygame.mixer.Sound("assets/shot.wav")
@@ -171,18 +171,14 @@ while run:
         # DRAWING SECTION
         #########################
 
-        screen.fill("grey100")
         #draw level
         world.draw(screen)
         #draw groups
         enemy_group.draw(screen)
         for turret in turret_group:
             turret.draw(screen)
-            
-        # Displaying money and health
-        draw_text(str(world.health), text_font, "grey100", 0, 0)
-        draw_text(str(world.money), text_font, "grey100", 0, 30)
-        draw_text(str(world.level), text_font, "grey100", 0, 60)
+
+        display_data()
 
         if game_over == False:
             # Check if the level has been started or not
