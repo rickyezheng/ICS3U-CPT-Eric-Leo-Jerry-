@@ -51,6 +51,8 @@ cancel_image = pygame.image.load('assets/cancel.png').convert_alpha()
 upgrade_turret_image = pygame.image.load("assets/upgrade_turret.png").convert_alpha()
 begin_image = pygame.image.load("assets/begin.png").convert_alpha()
 restart_image = pygame.image.load("assets/restart.png").convert_alpha()
+shot_fx= pygame.mixer.Sound("assets/shot.wav")
+shot_fx.set_volume(0.5)
 
 
 # Load json data for level
@@ -77,7 +79,7 @@ def create_turret(mouse_pos):
             if (mouse_tile_x, mouse_tile_y) == (turret.tile_x, turret.tile_y):
                 space_is_free = False
         if space_is_free ==True:
-            new_turret = Turret(turret_spritesheets, mouse_tile_x, mouse_tile_y)
+            new_turret = Turret(turret_spritesheets, mouse_tile_x, mouse_tile_y, shot_fx)
             turret_group.add(new_turret)
         # Deduct cost of turret
         world.money-=constants.BUY_COST
