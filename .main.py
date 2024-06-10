@@ -157,7 +157,7 @@ while run:
                 game_over = True
                 game_outcome = -1 #loss
             #check if player has won
-            if world.level > constants.TOTAL_LEVELS:
+            if world.level >= constants.TOTAL_LEVELS:
                 game_over = True
                 game_outcome = 1 #win
         
