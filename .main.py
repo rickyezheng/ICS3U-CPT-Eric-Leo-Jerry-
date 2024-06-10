@@ -199,62 +199,62 @@ while run:
                         world.spawned_enemies += 1
                         last_enemy_spawn = pygame.time.get_ticks()
         
-        # Check if the wave is finished
-        if world.check_level_complete() == True:
-            world.money += constants.LEVEL_COMPLETE_REWARD
-            world.level += 1
-            level_started = False
-            last_enemy_spawn = pygame.time.get_ticks()
-            world.reset_level()
-            world.process_enemies()
+            # Check if the wave is finished
+            if world.check_level_complete() == True:
+                world.money += constants.LEVEL_COMPLETE_REWARD
+                world.level += 1
+                level_started = False
+                last_enemy_spawn = pygame.time.get_ticks()
+                world.reset_level()
+                world.process_enemies()
 
-        # Draw buttons
-        # Button for placing turrets
-        # For the "turret button" show cost of turret and draw the button
-        draw_text(str(constants.BUY_COST), text_font, "grey100", constants.SCREEN_WIDTH + 215, 135)
-        screen.blit(coin_image, (constants.SCREEN_WIDTH + 260, 130))
-        if turret_button.draw(screen):
-            placing_turrets = True
-        # If placing turrets then show the cancel button as well
-        if placing_turrets==True:
-            # Show cursor turret
-            cursor_rect = cursor_turret.get_rect()
-            cursor_pos = pygame.mouse.get_pos()
-            cursor_rect.center = cursor_pos
-            if cursor_pos[0] <= constants.SCREEN_WIDTH:
-                screen.blit(cursor_turret, cursor_rect)
-            if cancel_button.draw(screen):
+            # Draw buttons
+            # Button for placing turrets
+            # For the "turret button" show cost of turret and draw the button
+            draw_text(str(constants.BUY_COST), text_font, "grey100", constants.SCREEN_WIDTH + 215, 135)
+            screen.blit(coin_image, (constants.SCREEN_WIDTH + 260, 130))
+            if turret_button.draw(screen):
+                placing_turrets = True
+            # If placing turrets then show the cancel button as well
+            if placing_turrets==True:
+                # Show cursor turret
+                cursor_rect = cursor_turret.get_rect()
+                cursor_pos = pygame.mouse.get_pos()
+                cursor_rect.center = cursor_pos
+                if cursor_pos[0] <= constants.SCREEN_WIDTH:
+                    screen.blit(cursor_turret, cursor_rect)
+                if cancel_button.draw(screen):
+                    placing_turrets = False
+            # If a turret is selected then show the upgrade button
+            if selected_turret:
+                # If it can be upgraded show button
+                if selected_turret.upgrade_level < constants.TURRET_LEVELS:
+                    draw_text(str(constants.UPGRADE_COST), text_font, "grey100", constants.SCREEN_WIDTH + 215, 195)
+                    screen.blit(coin_image, (constants.SCREEN_WIDTH + 260, 190))
+                    if upgrade_button.draw(screen):
+                        if world.money >= constants.UPGRADE_COST:
+                            selected_turret.upgrade()
+                            world.money -= constants.UPGRADE_COST
+
+        else:
+            pygame.draw.rect(screen, "dodgerblue", (200, 200, 400, 200), border_radius = 30)
+            if game_outcome == -1:
+                draw_text("GAME OVER", large_font, "grey0", 310, 230)
+            elif game_outcome == 1:
+                draw_text("YOU WIN!", large_font, "grey0", 315, 230)
+            # Restart level
+            if restart_button.draw(screen):
+                game_over = False
+                level_started = False
                 placing_turrets = False
-        # If a turret is selected then show the upgrade button
-        if selected_turret:
-            # If it can be upgraded show button
-            if selected_turret.upgrade_level < constants.TURRET_LEVELS:
-                draw_text(str(constants.UPGRADE_COST), text_font, "grey100", constants.SCREEN_WIDTH + 215, 195)
-                screen.blit(coin_image, (constants.SCREEN_WIDTH + 260, 190))
-                if upgrade_button.draw(screen):
-                    if world.money >= constants.UPGRADE_COST:
-                        selected_turret.upgrade()
-                        world.money -= constants.UPGRADE_COST
-
-    else:
-        pygame.draw.rect(screen, "dodgerblue", (200, 200, 400, 200), border_radius = 30)
-        if game_outcome == -1:
-            draw_text("GAME OVER", large_font, "grey0", 310, 230)
-        elif game_outcome == 1:
-            draw_text("YOU WIN!", large_font, "grey0", 315, 230)
-        # Restart level
-        if restart_button.draw(screen):
-            game_over = False
-            level_started = False
-            placing_turrets = False
-            selected_turret = None
-            last_enemy_spawn = pygame.time.get_ticks()
-            world = World(world_data, map_image)
-            world.process_data()
-            world.process_enemies()
-            # Empty groups
-            enemy_group.empty()
-            turret_group.empty()
+                selected_turret = None
+                last_enemy_spawn = pygame.time.get_ticks()
+                world = World(world_data, map_image)
+                world.process_data()
+                world.process_enemies()
+                # Empty groups
+                enemy_group.empty()
+                turret_group.empty()
 
     # Event handler (add comments)
     for event in pygame.event.get():
