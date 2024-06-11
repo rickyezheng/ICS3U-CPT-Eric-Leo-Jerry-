@@ -65,44 +65,44 @@ ENEMY_SPAWN_DATA = [
   {
     #10
     "weak": 0,
-    "medium": 100,
-    "strong": 0,
-    "elite": 0
+    "medium": 50,
+    "strong": 10,
+    "elite": 5
   },
   {
     #11
     "weak": 5,
     "medium": 10,
-    "strong": 12,
-    "elite": 2
+    "strong": 15,
+    "elite": 7
   },
   {
     #12
     "weak": 0,
     "medium": 15,
-    "strong": 10,
-    "elite": 5
-  },
-  {
-    #13
-    "weak": 20,
-    "medium": 0,
-    "strong": 25,
+    "strong": 23,
     "elite": 10
   },
   {
-    #14
-    "weak": 15,
-    "medium": 15,
-    "strong": 15,
+    #13
+    "weak": 10,
+    "medium": 0,
+    "strong": 35,
     "elite": 15
   },
   {
+    #14
+    "weak": 0,
+    "medium": 0,
+    "strong": 30,
+    "elite": 28
+  },
+  {
     #15
-    "weak": 25,
-    "medium": 25,
-    "strong": 25,
-    "elite": 25
+    "weak": 0,
+    "medium": 0,
+    "strong": 0,
+    "elite": 50
   }
 ]
 
@@ -116,11 +116,11 @@ ENEMY_DATA = {
     "speed": 3
   },
     "strong": {
-    "health": 20,
+    "health": 25,
     "speed": 4
   },
     "elite": {
-    "health": 30,
+    "health": 40,
     "speed": 6
   }
 }
