@@ -1,3 +1,4 @@
+#Dictionary that stores the data for future use
 TURRET_DATA = [
   {
     #1
