@@ -1,3 +1,9 @@
+'''
+Things we need to do:
+1. Pause menu
+2. Add settings and do things with json file to save the data
+'''
+
 import pygame
 import json
 from enemy import Enemy
