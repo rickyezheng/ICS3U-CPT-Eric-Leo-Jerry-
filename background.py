@@ -1,6 +1,6 @@
 import pygame
 import sys
-#THe RIzzler created the backruond
+
 # Initialize Pygame
 pygame.init()
 
