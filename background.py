@@ -1,5 +1,4 @@
 import pygame
-import sys
 
 # Initialize Pygame
 pygame.init()
@@ -32,4 +31,3 @@ while running:
 
 # Quit Pygame
 pygame.quit()
-sys.exit()
