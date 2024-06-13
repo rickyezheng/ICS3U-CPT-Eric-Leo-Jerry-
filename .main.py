@@ -262,13 +262,17 @@ while run:
                 enemy_group.empty()
                 turret_group.empty()
 
-    # Event handler (add comments)
+    # Event handler
     for event in pygame.event.get():
+        # Quit program
         if event.type == pygame.QUIT:
             run = False
+        # Mouse click
         if state == 'start' and event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
             mouse_pos = pygame.mouse.get_pos()
+            # Check if mouse is on the game area
             if mouse_pos[0] < constants.SCREEN_WIDTH and mouse_pos[1] < constants.SCREEN_HEIGHT:
+                # Clear selected turrets
                 selected_turret = None
                 clear_selection()
                 if placing_turrets ==True:
@@ -280,6 +284,7 @@ while run:
         if state == 'exit':
             run = False
 
+    #update display
     pygame.display.flip()
 
 pygame.quit()
