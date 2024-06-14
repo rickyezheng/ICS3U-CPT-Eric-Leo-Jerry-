@@ -133,8 +133,8 @@ upgrade_button = Button(constants.SCREEN_WIDTH + 5, 180, upgrade_turret_image, T
 begin_button = Button(constants.SCREEN_WIDTH + 60, 300, begin_image, True)
 restart_button = Button(310, 300, restart_image, True)
 fast_forward_button = Button(constants.SCREEN_WIDTH + 50, 300, fast_forward_image, False)
-paused=False
-pause_button=Button(constants.SCREEN_WIDTH + 50, 300, pause_image, True)
+paused = False
+pause_button = Button(constants.SCREEN_WIDTH + 50, 300, pause_image, True)
     
 # Initialize main menu and settings
 main_menu = MainMenu(screen)
@@ -195,7 +195,7 @@ while run:
                 #Pause button
                 if pause_button.draw(screen):
                     paused = not paused
-                    print("Pause button clicked!")
+                    world.game_speed = 0
                 if not paused:
                     #fast forward option
                     world.game_speed = 1
