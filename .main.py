@@ -26,6 +26,7 @@ level_started = False
 last_enemy_spawn = pygame.time.get_ticks()
 placing_turrets = False
 selected_turret = None
+paused = False
 
 # Load images
 # Map
@@ -133,14 +134,14 @@ upgrade_button = Button(constants.SCREEN_WIDTH + 5, 180, upgrade_turret_image, T
 begin_button = Button(constants.SCREEN_WIDTH + 60, 300, begin_image, True)
 restart_button = Button(310, 300, restart_image, True)
 fast_forward_button = Button(constants.SCREEN_WIDTH + 50, 300, fast_forward_image, False)
-paused = False
-pause_button = Button(constants.SCREEN_WIDTH + 50, 300, pause_image, True)
+pause_button = Button(constants.SCREEN_WIDTH + 225, 25, pause_image, True)
     
 # Initialize main menu and settings
 main_menu = MainMenu(screen)
 settings = Settings(screen)
 state = 'main_menu'
 
+# Game loop
 # Game loop
 run = True
 while run:
@@ -154,18 +155,17 @@ while run:
         #########################
         # UPDATING SECTION
         #########################
-
        
         if game_over == False:
-            #check if player has lost
+            # Check if player has lost
             if world.health <= 0:
                 game_over = True
-                game_outcome = -1 #loss
-            #check if player has won
+                game_outcome = -1 # loss
+            # Check if player has won
             if world.level >= constants.TOTAL_LEVELS:
                 game_over = True
-                game_outcome = 1 #win
-        
+                game_outcome = 1 # win
+
         enemy_group.update(world)
         turret_group.update(enemy_group, world)
 
@@ -176,9 +176,9 @@ while run:
         # DRAWING SECTION
         #########################
 
-        #draw level
+        # Draw level
         world.draw(screen)
-        #draw groups
+        # Draw groups
         enemy_group.draw(screen)
         for turret in turret_group:
             turret.draw(screen)
@@ -191,17 +191,12 @@ while run:
                 if begin_button.draw(screen):
                     level_started = True
             else:
-                
-                #Pause button
-                if pause_button.draw(screen):
-                    paused = not paused
-                    world.game_speed = 0
-                if not paused:
-                    #fast forward option
+                if paused == False:
+                    # Fast forward option
                     world.game_speed = 1
                     if fast_forward_button.draw(screen):
                         world.game_speed = 2
-                # Spawn enemies
+                    # Spawn enemies
                     if pygame.time.get_ticks() - last_enemy_spawn > constants.SPAWN_COOLDOWN:
                         if world.spawned_enemies < len(world.enemy_list):
                             enemy_type = world.enemy_list[world.spawned_enemies]
@@ -209,7 +204,14 @@ while run:
                             enemy_group.add(enemy)
                             world.spawned_enemies += 1
                             last_enemy_spawn = pygame.time.get_ticks()
-        
+                else:
+                    world.game_speed = 0
+
+            # Handle the pause button click
+            if pause_button.draw(screen):
+                paused = not paused
+                world.game_speed = 0 if paused else 1
+            
             # Check if the wave is finished
             if world.check_level_complete() == True:
                 world.money += constants.LEVEL_COMPLETE_REWARD
@@ -227,7 +229,7 @@ while run:
             if turret_button.draw(screen):
                 placing_turrets = True
             # If placing turrets then show the cancel button as well
-            if placing_turrets==True:
+            if placing_turrets == True:
                 # Show cursor turret
                 cursor_rect = cursor_turret.get_rect()
                 cursor_pos = pygame.mouse.get_pos()
@@ -276,19 +278,16 @@ while run:
             if mouse_pos[0] < constants.SCREEN_WIDTH and mouse_pos[1] < constants.SCREEN_HEIGHT:
                 selected_turret = None
                 clear_selection()
-                if placing_turrets ==True:
+                if placing_turrets == True:
                     # Check if there is enough money
                     if world.money >= constants.BUY_COST:
                         create_turret(mouse_pos)
                 else:
                     selected_turret = select_turret(mouse_pos)
-        # Handle the pause button click
-        if state == "start" and event.type== pygame.MOUSEBUTTONDOWN and event.button==1:
-            if pause_button.rect.collidepoint(event.pos):
-                paused= not paused
         if state == 'exit':
             run = False
 
     pygame.display.flip()
 
 pygame.quit()
+
