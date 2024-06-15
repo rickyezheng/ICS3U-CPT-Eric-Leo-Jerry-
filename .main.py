@@ -35,6 +35,8 @@ exit_image = pygame.image.load("assets/exit.png").convert_alpha()
 heart_image = pygame.image.load("assets/heart.png").convert_alpha()
 coin_image = pygame.image.load("assets/coin.png").convert_alpha()
 logo_image = pygame.image.load("assets/logo.png").convert_alpha()
+sell_image = pygame.image.load("assets/sell.png").convert_alpha()
+
 
 # Load sounds
 shot_fx = pygame.mixer.Sound("assets/shot.wav")
@@ -106,6 +108,7 @@ restart_button = Button(310, 300, restart_image, True)
 fast_forward_button = Button(constants.SCREEN_WIDTH + 50, 300, fast_forward_image, False)
 pause_button = Button(constants.SCREEN_WIDTH + 225, 25, pause_image, True)
 exit_button = Button(constants.SCREEN_WIDTH + 250, constants.SCREEN_HEIGHT//2, exit_image,True)
+sell_button = Button(constants.SCREEN_WIDTH + 60, 240, sell_image, True)
 
 # Initialize main menu and settings
 main_menu = MainMenu(screen)
@@ -229,6 +232,10 @@ while run:
                             if world.money >= constants.UPGRADE_COST:
                                 selected_turret.upgrade()
                                 world.money -= constants.UPGRADE_COST
+                    if sell_button.draw(screen):
+                        selected_turret.kill()
+                        world.money += 100 + (selected_turret.upgrade_level - 1) * 50
+                        selected_turret = False
 
         else:
             pygame.draw.rect(screen, "dodgerblue", (200, 200, 400, 200), border_radius=30)
