@@ -237,7 +237,7 @@ while run:
                     screen.blit(coin_image, (constants.SCREEN_WIDTH + 260, 245))
                     if sell_button.draw(screen):
                         selected_turret.kill()
-                        world.money += sell_price
+                        world.money += int(sell_price)
                         selected_turret = False
 
         else:
