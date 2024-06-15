@@ -18,6 +18,7 @@ class World():
     self.killed_enemies = 0
     self.missed_enemies = 0
 
+
   def process_data(self):
     #look through data to extract relevant info
     for layer in self.level_data["layers"]:
@@ -28,12 +29,14 @@ class World():
           waypoint_data = obj["polyline"]
           self.process_waypoints(waypoint_data)
 
+
   def process_waypoints(self, data):
     #iterate through waypoints to extract individual sets of x and y coordinates
     for point in data:
       temp_x = point.get("x")
       temp_y = point.get("y")
       self.waypoints.append((temp_x, temp_y))
+
 
   def process_enemies(self):
     enemies = ENEMY_SPAWN_DATA[self.level - 1]
@@ -44,9 +47,11 @@ class World():
     #now randomize the list to shuffle the enemies
     random.shuffle(self.enemy_list)
 
+
   def check_level_complete(self):
     if (self.killed_enemies + self.missed_enemies) == len(self.enemy_list):
       return True
+
 
   def reset_level(self):
     #reset enemy variables
@@ -55,5 +60,8 @@ class World():
     self.killed_enemies = 0
     self.missed_enemies = 0
 
+
   def draw(self, surface):
     surface.blit(self.image, (0, 0))
+
+    

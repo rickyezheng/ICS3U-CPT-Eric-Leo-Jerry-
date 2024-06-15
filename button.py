@@ -1,4 +1,6 @@
 import pygame
+
+#Defining a button class that can be used to detect mouse clicks
 class Button():
   def __init__(self, x, y, image, single_click):
     self.image = image
@@ -10,10 +12,10 @@ class Button():
   def draw(self, surface):
     action = False
     # Get mouse position
-    pos = pygame.mouse.get_pos()
+    position = pygame.mouse.get_pos()
 
     # Check mouseover and clicked conditions
-    if self.rect.collidepoint(pos):
+    if self.rect.collidepoint(position):
       if pygame.mouse.get_pressed()[0] == 1 and self.clicked == False:
         action = True
         # If button is a single click type, then set clicked to True

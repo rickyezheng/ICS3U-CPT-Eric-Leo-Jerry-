@@ -1,10 +1,11 @@
 import pygame
 import json
+import constants
+#import Classes from other files
 from enemy import Enemy
 from world import World
 from turret import Turret
 from button import Button
-import constants
 from main_menu import MainMenu
 from settings import Settings
 
@@ -17,15 +18,6 @@ clock = pygame.time.Clock()
 # Create game window
 screen = pygame.display.set_mode((constants.SCREEN_WIDTH + constants.SIDE_PANEL, constants.SCREEN_HEIGHT))
 pygame.display.set_caption("Tower Defence")
-
-# Game variables
-game_over = False
-game_outcome = 0 # -1 is loss & 1 is win
-level_started = False
-last_enemy_spawn = pygame.time.get_ticks()
-placing_turrets = False
-selected_turret = None
-paused = False
 
 # Load images
 map_image = pygame.image.load('assets/level.png').convert_alpha()
@@ -119,6 +111,15 @@ exit_button = Button(constants.SCREEN_WIDTH // 2, constants.SCREEN_HEIGHT // 2, 
 main_menu = MainMenu(screen)
 settings = Settings(screen)
 state = 'main_menu'
+
+# Game variables
+game_over = False
+game_outcome = 0 # -1 is loss & 1 is win
+level_started = False
+last_enemy_spawn = pygame.time.get_ticks()
+placing_turrets = False
+selected_turret = None
+paused = False
 
 # Game loop
 run = True

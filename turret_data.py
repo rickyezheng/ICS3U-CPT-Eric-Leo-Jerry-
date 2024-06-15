@@ -18,6 +18,6 @@ TURRET_DATA = [
   {
     #4
     "range": 150,
-    "cooldown": 900,
+    "cooldown": 800,
   }
 ]

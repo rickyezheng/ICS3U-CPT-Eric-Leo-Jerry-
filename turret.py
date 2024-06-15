@@ -44,6 +44,7 @@ class Turret(pygame.sprite.Sprite):
     self.range_rect = self.range_image.get_rect()
     self.range_rect.center = self.rect.center
 
+
   def load_images(self, sprite_sheet):
     #extract images from spritesheet
     size = sprite_sheet.get_height()
@@ -53,14 +54,6 @@ class Turret(pygame.sprite.Sprite):
       animation_list.append(temp_img)
     return animation_list
 
-  def update(self, enemy_group, world):
-    #if target picked, play firing animation
-    if self.target:
-      self.play_animation()
-    else:
-      #search for new target once turret has cooled down
-      if pygame.time.get_ticks() - self.last_shot > (self.cooldown / world.game_speed):
-        self.pick_target(enemy_group)
 
   def pick_target(self, enemy_group):
     #find an enemy to target
@@ -81,6 +74,7 @@ class Turret(pygame.sprite.Sprite):
           self.shot_fx.play()
           break
 
+
   def play_animation(self):
     #update image
     self.original_image = self.animation_list[self.frame_index]
@@ -94,6 +88,26 @@ class Turret(pygame.sprite.Sprite):
         #record completed time and clear target so cooldown can begin
         self.last_shot = pygame.time.get_ticks()
         self.target = None
+
+
+  def draw(self, surface):
+    self.image = pygame.transform.rotate(self.original_image, self.angle - 90)
+    self.rect = self.image.get_rect()
+    self.rect.center = (self.x, self.y)
+    surface.blit(self.image, self.rect)
+    if self.selected:
+      surface.blit(self.range_image, self.range_rect)
+
+
+  def update(self, enemy_group, world):
+    #if target picked, play firing animation
+    if self.target:
+      self.play_animation()
+    else:
+      #search for new target once turret has cooled down
+      if pygame.time.get_ticks() - self.last_shot > (self.cooldown / world.game_speed):
+        self.pick_target(enemy_group)
+
 
   def upgrade(self):
     self.upgrade_level += 1
@@ -112,10 +126,4 @@ class Turret(pygame.sprite.Sprite):
     self.range_rect = self.range_image.get_rect()
     self.range_rect.center = self.rect.center
 
-  def draw(self, surface):
-    self.image = pygame.transform.rotate(self.original_image, self.angle - 90)
-    self.rect = self.image.get_rect()
-    self.rect.center = (self.x, self.y)
-    surface.blit(self.image, self.rect)
-    if self.selected:
-      surface.blit(self.range_image, self.range_rect)
+  
