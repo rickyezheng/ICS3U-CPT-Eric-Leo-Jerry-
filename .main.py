@@ -113,7 +113,7 @@ begin_button = Button(constants.SCREEN_WIDTH + 60, 300, begin_image, True)
 restart_button = Button(310, 300, restart_image, True)
 fast_forward_button = Button(constants.SCREEN_WIDTH + 50, 300, fast_forward_image, False)
 pause_button = Button(constants.SCREEN_WIDTH + 225, 25, pause_image, True)
-exit_button = Button(constants.SCREEN_WIDTH // 2, constants.SCREEN_HEIGHT // 2, exit_image, True)
+exit_button = Button(constants.SCREEN_WIDTH + 225, constants.SCREEN_HEIGHT//2, exit_image,True)
 
 # Initialize main menu and settings
 main_menu = MainMenu(screen)
