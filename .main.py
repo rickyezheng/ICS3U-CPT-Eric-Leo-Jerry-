@@ -232,9 +232,12 @@ while run:
                             if world.money >= constants.UPGRADE_COST:
                                 selected_turret.upgrade()
                                 world.money -= constants.UPGRADE_COST
+                    sell_price = (selected_turret.upgrade_level + 1) * (constants.UPGRADE_COST/2)
+                    draw_text(str(int(sell_price)), text_font, "grey100", constants.SCREEN_WIDTH + 215, 250)
+                    screen.blit(coin_image, (constants.SCREEN_WIDTH + 260, 245))
                     if sell_button.draw(screen):
                         selected_turret.kill()
-                        world.money += 100 + (selected_turret.upgrade_level - 1) * 50
+                        world.money += sell_price
                         selected_turret = False
 
         else:
