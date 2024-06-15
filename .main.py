@@ -87,7 +87,7 @@ def create_turret(mouse_pos):
 
 def select_turret(mouse_pos):
     mouse_tile_x = mouse_pos[0] // constants.TILE_SIZE
-    mouse_tile_y = mouse_pos[1] // constants.COLS
+    mouse_tile_y = mouse_pos[1] // constants.TILE_SIZE
     for turret in turret_group:
         if (mouse_tile_x, mouse_tile_y) == (turret.tile_x, turret.tile_y):
             return turret
@@ -219,7 +219,9 @@ while run:
                     if cancel_button.draw(screen):
                         placing_turrets = False
                 if selected_turret:
+                    # if a turret can be upgraded then show the upgrade button
                     if selected_turret.upgrade_level < constants.TURRET_LEVELS:
+                        # show cost of upgrade and draw the button
                         draw_text(str(constants.UPGRADE_COST), text_font, "grey100", constants.SCREEN_WIDTH + 215, 195)
                         screen.blit(coin_image, (constants.SCREEN_WIDTH + 260, 190))
                         if upgrade_button.draw(screen):
