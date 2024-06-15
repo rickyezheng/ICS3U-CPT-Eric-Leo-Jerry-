@@ -9,6 +9,13 @@ from button import Button
 from main_menu import MainMenu
 from settings import Settings
 
+# Load settings from JSON file
+with open('setting.json', 'r') as f:
+    setting = json.load(f)
+
+speed = setting["speed"]
+volume = setting["volume"]
+
 # Initialize pygame
 pygame.init()
 
@@ -37,10 +44,9 @@ coin_image = pygame.image.load("assets/coin.png").convert_alpha()
 logo_image = pygame.image.load("assets/logo.png").convert_alpha()
 sell_image = pygame.image.load("assets/sell.png").convert_alpha()
 
-
 # Load sounds
 shot_fx = pygame.mixer.Sound("assets/shot.wav")
-shot_fx.set_volume(0.5)
+shot_fx.set_volume(volume)
 
 # Load json data for level
 with open('assets/level.tmj') as file:
@@ -107,7 +113,7 @@ begin_button = Button(constants.SCREEN_WIDTH + 60, 300, begin_image, True)
 restart_button = Button(310, 300, restart_image, True)
 fast_forward_button = Button(constants.SCREEN_WIDTH + 50, 300, fast_forward_image, False)
 pause_button = Button(constants.SCREEN_WIDTH + 225, 25, pause_image, True)
-exit_button = Button(constants.SCREEN_WIDTH + 250, constants.SCREEN_HEIGHT//2, exit_image,True)
+exit_button = Button(constants.SCREEN_WIDTH + 250, constants.SCREEN_HEIGHT//2, exit_image, True)
 sell_button = Button(constants.SCREEN_WIDTH + 60, 240, sell_image, True)
 
 # Initialize main menu and settings
@@ -177,7 +183,7 @@ while run:
                     # Fast forward option
                     world.game_speed = 1
                     if fast_forward_button.draw(screen):
-                        world.game_speed = 2
+                        world.game_speed = speed
                     # Spawn enemies
                     if pygame.time.get_ticks() - last_enemy_spawn > constants.SPAWN_COOLDOWN:
                         if world.spawned_enemies < len(world.enemy_list):
@@ -232,13 +238,13 @@ while run:
                             if world.money >= constants.UPGRADE_COST:
                                 selected_turret.upgrade()
                                 world.money -= constants.UPGRADE_COST
-                    sell_price = (selected_turret.upgrade_level + 1) * (constants.UPGRADE_COST/2)
+                    sell_price = (selected_turret.upgrade_level + 1) * (constants.UPGRADE_COST / 2)
                     draw_text(str(int(sell_price)), text_font, "grey100", constants.SCREEN_WIDTH + 215, 250)
                     screen.blit(coin_image, (constants.SCREEN_WIDTH + 260, 245))
                     if sell_button.draw(screen):
                         selected_turret.kill()
                         world.money += int(sell_price)
-                        selected_turret = False
+                        selected_turret = None
 
         else:
             pygame.draw.rect(screen, "dodgerblue", (200, 200, 400, 200), border_radius=30)
