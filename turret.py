@@ -105,8 +105,12 @@ class Turret(pygame.sprite.Sprite):
       self.play_animation()
     else:
       #search for new target once turret has cooled down
-      if pygame.time.get_ticks() - self.last_shot > (self.cooldown / world.game_speed):
-        self.pick_target(enemy_group)
+      try: 
+        if pygame.time.get_ticks() - self.last_shot > (self.cooldown / world.game_speed):
+          self.pick_target(enemy_group)
+      finally:
+        if pygame.time.get_ticks() - self.last_shot > (self.cooldown / world.game_speed):
+          self.pick_target(enemy_group)
 
 
   def upgrade(self):

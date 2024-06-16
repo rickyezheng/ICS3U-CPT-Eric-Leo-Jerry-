@@ -3,9 +3,9 @@ import constants
 import json
 from button import Button
 
-# Load settings from JSON file
-with open('setting.json', 'r') as file:
-    settings_data = json.load(file)
+# Load settings from JSON file (Credit to Sonia for helping us figure out json files)
+with open('setting.json', 'r') as f:
+    settings_data = json.load(f)
 
 class Settings:
     def __init__(self, screen):
@@ -17,7 +17,7 @@ class Settings:
         self.volume = settings_data.get('volume', 1)
         self.speed = settings_data.get('speed', 5)
 
-        # Create buttons and sliders
+        # Create buttons so the user can increase or decrease volume and speed
         screen_center_x = (constants.SCREEN_WIDTH + constants.SIDE_PANEL) // 2
         self.back_button = Button(screen_center_x - 200, 500, pygame.image.load("assets/back.png").convert_alpha(), True)
         
