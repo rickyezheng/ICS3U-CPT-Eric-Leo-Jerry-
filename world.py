@@ -7,16 +7,19 @@ class World():
   def __init__(self, data, map_image):
     self.level = 1
     self.game_speed = 1
-    self.health = constants.HEALTH
-    self.money = constants.MONEY
-    self.tile_map = []
-    self.waypoints = []
-    self.level_data = data
-    self.image = map_image
-    self.enemy_list = []
     self.spawned_enemies = 0
     self.killed_enemies = 0
     self.missed_enemies = 0
+
+    self.health = constants.HEALTH
+    self.money = constants.MONEY
+
+    self.tile_map = []
+    self.waypoints = []
+    self.enemy_list = []
+    
+    self.level_data = data
+    self.image = map_image
 
 
   def process_data(self):
