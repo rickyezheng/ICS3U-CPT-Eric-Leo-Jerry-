@@ -140,6 +140,12 @@ while run:
 
     if state == 'main_menu':
         state = main_menu.draw()
+        with open('setting.json', 'r') as f:
+            setting = json.load(f)
+
+        speed = setting["speed"]
+        volume = setting["volume"]
+        
     elif state == 'settings':
         state = settings.draw()
     elif state == 'start':
