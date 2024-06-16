@@ -5,7 +5,7 @@ from button import Button
 
 # Load settings from JSON file (Credit to Sonia for helping us figure out json files)
 with open('setting.json', 'r') as f:
-    settings_data = json.load(f)
+    settings = json.load(f)
 
 class Settings:
     def __init__(self, screen):
@@ -14,8 +14,8 @@ class Settings:
         self.title = self.font.render("Settings", True, pygame.Color('White'))
 
         # Load settings
-        self.volume = settings_data.get('volume', 1)
-        self.speed = settings_data.get('speed', 5)
+        self.volume = settings.get('volume')
+        self.speed = settings.get('speed')
 
         # Create buttons so the user can increase or decrease volume and speed
         screen_center_x = (constants.SCREEN_WIDTH + constants.SIDE_PANEL) // 2
