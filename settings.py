@@ -19,13 +19,13 @@ class Settings:
 
         # Create buttons and sliders
         screen_center_x = (constants.SCREEN_WIDTH + constants.SIDE_PANEL) // 2
-        self.back_button = Button(screen_center_x - 50, 500, pygame.image.load("assets/back_button.png").convert_alpha(), True)
+        self.back_button = Button(screen_center_x - 200, 500, pygame.image.load("assets/back.png").convert_alpha(), True)
         
-        self.volume_up_button = Button(screen_center_x + 100, 200, pygame.image.load("assets/plus_button.png").convert_alpha(), True)
-        self.volume_down_button = Button(screen_center_x - 100, 200, pygame.image.load("assets/minus_button.png").convert_alpha(), True)
+        self.volume_up_button = Button(screen_center_x + 150, 200, pygame.image.load("assets/plus.png").convert_alpha(), True)
+        self.volume_down_button = Button(screen_center_x - 150, 200, pygame.image.load("assets/minus.png").convert_alpha(), True)
         
-        self.speed_up_button = Button(screen_center_x + 100, 300, pygame.image.load("assets/plus_button.png").convert_alpha(), True)
-        self.speed_down_button = Button(screen_center_x - 100, 300, pygame.image.load("assets/minus_button.png").convert_alpha(), True)
+        self.speed_up_button = Button(screen_center_x + 150, 300, pygame.image.load("assets/plus.png").convert_alpha(), True)
+        self.speed_down_button = Button(screen_center_x - 150, 300, pygame.image.load("assets/minus.png").convert_alpha(), True)
 
         self.volume_label = self.font.render(f"Volume: {self.volume}", True, pygame.Color('White'))
         self.speed_label = self.font.render(f"Speed: {self.speed}", True, pygame.Color('White'))
@@ -36,7 +36,7 @@ class Settings:
         self.screen.blit(self.title, title_rect)
 
         # Draw volume controls
-        self.screen.blit(self.volume_label, (self.volume_down_button.rect.x + 100, self.volume_down_button.rect.y))
+        self.screen.blit(self.volume_label, (self.volume_down_button.rect.x + 95, self.volume_down_button.rect.y))
         if self.volume_up_button.draw(self.screen):
             self.volume = min(self.volume + 1, 10)  # Max volume 10
         if self.volume_down_button.draw(self.screen):
@@ -44,7 +44,7 @@ class Settings:
         self.volume_label = self.font.render(f"Volume: {self.volume}", True, pygame.Color('White'))
 
         # Draw speed controls
-        self.screen.blit(self.speed_label, (self.speed_down_button.rect.x + 100, self.speed_down_button.rect.y))
+        self.screen.blit(self.speed_label, (self.speed_down_button.rect.x + 97, self.speed_down_button.rect.y))
         if self.speed_up_button.draw(self.screen):
             self.speed = min(self.speed + 1, 10)  # Max speed 10
         if self.speed_down_button.draw(self.screen):

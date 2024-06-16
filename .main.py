@@ -43,6 +43,9 @@ heart_image = pygame.image.load("assets/heart.png").convert_alpha()
 coin_image = pygame.image.load("assets/coin.png").convert_alpha()
 logo_image = pygame.image.load("assets/logo.png").convert_alpha()
 sell_image = pygame.image.load("assets/sell.png").convert_alpha()
+plus_image = pygame.image.load("assets/plus.png").convert_alpha()
+minus_image = pygame.image.load("assets/minus.png").convert_alpha()
+back_image = pygame.image.load("assets/back.png").convert_alpha()
 
 # Load sounds
 shot_fx = pygame.mixer.Sound("assets/shot.wav")
