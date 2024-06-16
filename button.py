@@ -29,3 +29,5 @@ class Button():
     surface.blit(self.image, self.rect)
 
     return action
+  
+  #from ChatGPT modified, created a class for interactive buttons

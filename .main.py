@@ -206,7 +206,8 @@ while run:
             if paused:
                 # Draw the exit button when paused
                 if exit_button.draw(screen):
-                    run = False
+                    state="main_menu"
+                    paused=False    
 
             # Check if the wave is finished
             if world.check_level_complete() == True:
