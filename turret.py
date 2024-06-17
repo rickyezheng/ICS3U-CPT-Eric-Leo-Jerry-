@@ -108,9 +108,8 @@ class Turret(pygame.sprite.Sprite):
       try: 
         if pygame.time.get_ticks() - self.last_shot > (self.cooldown / world.game_speed):
           self.pick_target(enemy_group)
-      finally:
-        if pygame.time.get_ticks() - self.last_shot > (self.cooldown / world.game_speed):
-          self.pick_target(enemy_group)
+      except:
+        world.game_speed = 1
 
 
   def upgrade(self):
