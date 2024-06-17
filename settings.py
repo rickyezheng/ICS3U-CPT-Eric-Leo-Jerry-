@@ -3,7 +3,7 @@ import constants
 import json
 from button import Button
 
-# Load settings from JSON file (Credit to Sonia for helping us figure out json files)
+# Load settings from JSON file (Credit to Sonia for helping us figure out json files and settings)
 with open('setting.json', 'r') as f:
     settings = json.load(f)
 
@@ -30,6 +30,8 @@ class Settings:
         self.volume_label = self.font.render(f"Volume: {self.volume}", True, pygame.Color('White'))
         self.speed_label = self.font.render(f"Speed: {self.speed}", True, pygame.Color('White'))
 
+
+    #Drawing things onto the screen, controls
     def draw(self):
         self.screen.fill((0, 0, 0))  # Fill the screen with black
         title_rect = self.title.get_rect(center=((constants.SCREEN_WIDTH + constants.SIDE_PANEL) // 2, 100))

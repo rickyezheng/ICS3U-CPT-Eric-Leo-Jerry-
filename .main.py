@@ -170,10 +170,7 @@ while run:
             if selected_turret:
                 selected_turret.selected = True
 
-        #########################
         # DRAWING SECTION
-        #########################
-
         # Draw level
         world.draw(screen)
         # Draw groups
